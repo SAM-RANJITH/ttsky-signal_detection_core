@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ns/1ps
 
-module signal_detection_core (
+module tt_um_signal_detection_core (
     input  wire [7:0] ui_in,
     input  wire [7:0] uio_in,
     output wire [7:0] uio_out,
