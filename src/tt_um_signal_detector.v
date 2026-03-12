@@ -1,7 +1,8 @@
 `default_nettype none
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
-module tt_um_signal_detection_core (
+module tt_um_signal_detector (
+
     input  wire [7:0] ui_in,
     input  wire [7:0] uio_in,
     output wire [7:0] uio_out,
@@ -16,33 +17,43 @@ module tt_um_signal_detection_core (
 assign uio_out = 8'b0;
 assign uio_oe  = 8'b0;
 
-wire [7:0] sample_in;
 wire [7:0] fir_out;
-wire [7:0] envelope_out;
+wire [7:0] env_out;
 wire detect;
+wire [7:0] depth;
 
-assign sample_in = ui_in;
-
+// FIR FILTER
 fir_filter FIR (
     .clk(clk),
-    .din(sample_in),
+    .din(ui_in),
     .dout(fir_out)
 );
 
+// ENVELOPE DETECTOR
 envelope_detector ENV (
     .clk(clk),
     .signal(fir_out),
-    .env(envelope_out)
+    .env(env_out)
 );
 
+// PEAK DETECTOR
 peak_detector PEAK (
     .clk(clk),
-    .signal(envelope_out),
+    .signal(env_out),
     .detect(detect)
 );
 
-assign uo_out[7:1] = envelope_out[7:1];
-assign uo_out[0]   = detect;
+// DEPTH ESTIMATOR
+depth_estimator DEPTH (
+    .clk(clk),
+    .rst_n(rst_n),
+    .detect(detect),
+    .depth(depth)
+);
+
+// Output mapping
+assign uo_out[0] = detect;
+assign uo_out[7:1] = depth[7:1];
 
 endmodule
 
