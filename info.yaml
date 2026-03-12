@@ -11,7 +11,7 @@ project:
   tiles: "1x1"
 
   # Top module name
-  top_module:  "signal_detection_core"
+  top_module:  "tt_um_signal_detection_core"
 
   # Source files
   source_files:
