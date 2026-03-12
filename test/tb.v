@@ -30,7 +30,7 @@ module tb ();
   always #5 clk = ~clk;
 
   // DUT
-  signal_detection_core  user_project (
+  tt_um_signal_detection_core  user_project (
 
 `ifdef GL_TEST
       .VPWR(VPWR),
